@@ -5,6 +5,7 @@ import Category from "../Categories/Category";
 
 export default function Expenses(props) {
     const [ category, setCategory ] = useState(null)
+    const [ available, setAvailable ] = useState(0)
 
     useEffect(() => {
         async function getData() {
@@ -19,6 +20,12 @@ export default function Expenses(props) {
                 })
                 const data = await response.json()
                 setCategory(data)
+
+                let availableLeft = 0
+                data.expenses.forEach( expense => {
+                    availableLeft += expense.type === "credit" ? expense.amount : -expense.amount
+                })
+                setAvailable(availableLeft)
             }
             catch(err) {
                 console.error(err)
@@ -31,7 +38,7 @@ export default function Expenses(props) {
         return (
             <div className="expenses">
                 <h1>Expenses</h1>
-                <Category name={category.name} total={category.total} available={category.available} />
+                <Category name={category.name} total={category.total} available={available} />
                 <table style={styles.table} cellSpacing="0">
                     <tr style={styles.header}>
                         <th>Date</th>
@@ -43,7 +50,7 @@ export default function Expenses(props) {
                             <tr>
                                 <td style={styles.row}>{expense.date}</td>
                                 <td style={styles.row}>{expense.expense}</td>
-                                <td style={styles.row}>{`$${expense.amount}`}</td>
+                                <td style={{color: expense.type === "credit" ? "#75E68B" : "#DE3C35", textAlign: "center", padding: ".5em"}}>{`$${expense.amount.toFixed(2)}`}</td>
                             </tr>
                         )
                     })}

@@ -15,9 +15,16 @@ export default function Categories(props) {
                 })
                 const data = await response.json()
                 setCategories(data.categories)
+                // calculate total buget and remaining money
                 data.categories.forEach(category => {
+                    // add category credits and subtract debits
+                    let availableLeft = 0
+                    category.expenses.forEach( expense => {
+                        availableLeft += expense.type === "credit" ? expense.amount : -expense.amount
+                    })
+                    // add to total and available
                     setTotal(total => total + category.total)
-                    setAvailable(available => available + category.available)
+                    setAvailable(available => available + availableLeft)
                 })
             }
             catch(err) {
@@ -31,9 +38,13 @@ export default function Categories(props) {
         return (
             <div>
                 <h1>Categories</h1>
-                <Category name="Total" total={total} available={available} />
+                <Category name="Total" totalCategory={true} total={total} available={available} />
                 {categories.map( category => {
-                   return <Category name={category.name} total={category.total} available={category.available} setCategory={props.setCategory}/> 
+                    let available = 0
+                    category.expenses.forEach( expense => {
+                        available += expense.type === "credit" ? expense.amount : -expense.amount
+                    })
+                   return <Category name={category.name} totalCategory={false} total={category.total} available={available} setCategory={props.setCategory}/> 
                 })}
             </div>
         )

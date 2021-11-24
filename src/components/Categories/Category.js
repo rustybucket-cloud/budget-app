@@ -11,8 +11,10 @@ export default function Category(props) {
     })
 
     const handleClick = () => {
-        props.setCategory(props.name)
-        navigate("./expenses")
+        if (!props.totalCategory) {
+            props.setCategory(props.name)
+            navigate("./expenses") 
+        }
     }
 
     return (
@@ -22,7 +24,10 @@ export default function Category(props) {
                 <p>{props.total}</p>
             </div>
             <div style={styles.bar}>
-                <div style={styles.percentageBar, {width: `${percentage * 100}%`, backgroundColor: "#75E68B", padding: ".25em"}}>
+                {
+                // if percentage is greater than 0 color is green, else it is red 
+                }
+                <div style={styles.percentageBar, {width: `${percentage * 100}%`, backgroundColor: percentage * 100 > 0 ? "#75E68B" : "#DE3C35", padding: ".25em"}}>
                     <p style={styles.availableAmount}>{props.available}</p>
                 </div>
             </div>
