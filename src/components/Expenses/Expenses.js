@@ -17,7 +17,6 @@ export default function Expenses(props) {
     }, [])
 
     // calculate available from each expense
-    let sorted = false
     useEffect(() => {
         if (currentCategory) {
             let totalExpenses = 0
