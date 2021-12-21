@@ -30,6 +30,8 @@ export default function Expenses(props) {
     if (currentCategory) {
         return (
             <div className="expenses">
+                {/* add animation that moves expenses and returns to categories */}
+                <i className="fas fa-arrow-left"></i>
                 <h1>Expenses</h1>
                 <Category name={currentCategory.name} total={currentCategory.total} available={available} />
                 <table style={styles.table} cellSpacing="0">

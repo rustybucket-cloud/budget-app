@@ -48,8 +48,13 @@ export default function AddExpense(props) {
 
     // add expense to redux, create an object with info
     const handleClick = () => {
-        console.log("handleClick function called")
         dispatch(addExpense({category: selectedCategory, expense: expenseName, date: expenseDate, type: expenseType, amount: parseFloat(expenseAmount)}))
+        // reset inputs
+        setSelectedCategory("select one")
+        setExpenseDate("")
+        setExpenseType("select one")
+        setExpenseName("")
+        setExpenseAmount("")
     }
 
     if (categoryList) {
@@ -57,28 +62,28 @@ export default function AddExpense(props) {
             <div className="AddExpense">
                 <h1>Add Exppense</h1>
                 <label>Category
-                    <select id="add-expense-category" onChange={handleChange}>
-                        <option>Select One</option>
+                    <select id="add-expense-category" onChange={handleChange} value={selectedCategory}>
+                        <option value="select one">Select One</option>
                         {categoriesState.map( category => {
                             return <option>{category.name}</option>
                         })}
                     </select>
                 </label>
                 <label>Date
-                    <input type="date" id="add-expense-date"  onChange={handleChange}/>
+                    <input type="date" id="add-expense-date"  onChange={handleChange} />
                 </label>
                 <label>Expense Type
-                    <select id="add-expense-type" onChange={handleChange}>
-                        <option>Select One</option>
+                    <select id="add-expense-type" onChange={handleChange} value={expenseType}>
+                        <option value="select one">Select One</option>
                         <option value="debit">Debit</option>
                         <option value="credit">Credit</option>
                     </select>
                 </label>
                 <label>Expense Name
-                    <input id="add-expense-name" onChange={handleChange}/>
+                    <input id="add-expense-name" onChange={handleChange} value={expenseName}/>
                 </label>
                 <label>Expense Amount
-                        <input type="number" id="add-expense-amount" onChange={handleChange}/>
+                        <input type="number" id="add-expense-amount" onChange={handleChange} value={expenseAmount}/>
                 </label>
                 <button onClick={handleClick}>Add Expense</button>
             </div>
