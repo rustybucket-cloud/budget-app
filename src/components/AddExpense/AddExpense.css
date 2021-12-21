@@ -1,0 +1,13 @@
+.AddExpense {
+    margin-left: 1em;
+}
+.AddExpense * {
+    display: block;
+}
+.AddExpense h1 {
+    margin-left: 0;
+}
+.AddExpense select, .AddExpense input, .AddExpense button {
+    padding: .5em;
+    font-size: 1em;
+}

@@ -1,9 +1,15 @@
-import "./Header.css"
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import "./Header.css"
 
 export default function Header(props) {
     const handleClick = () => {
         props.setNav(!props.nav)
+    }
+
+    const handleRedirect = ({ currentTarget }) => {
+        console.log(currentTarget.id)
+        //navigate(`/${currentTarget.id}`)
     }
 
     return (
@@ -14,8 +20,8 @@ export default function Header(props) {
             </div>
             <nav className={props.nav ? "open" : null}>
                 <ul>
-                    <li>Categories</li>
-                    <li>Add Expense</li>
+                    <li id="categories" className={props.active === "categories" ? "active" : null} onClick={handleClick}><Link to="/">Categories</Link></li>
+                    <li id="addexpense" className={props.active === "addExpense" ? "active" : null} onClick={handleClick}><Link to="/addexpense">Add Expense</Link></li>
                     <li>Profile</li>
                 </ul>
             </nav>
