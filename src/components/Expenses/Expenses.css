@@ -1,9 +1,15 @@
 .expenses tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+.expenses tr:nth-child(odd) {
+    background-color: #4CC2BC;
+}
 .expenses {
     animation-name: entrance;
     animation-duration: 1s;
+}
+.expenses i {
+    margin-left: 1em;
 }
 @keyframes entrance {
     from {transform: translateX(-100%)}

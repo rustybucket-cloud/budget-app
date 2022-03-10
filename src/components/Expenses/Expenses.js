@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import "./Expenses.css"
 
 import Category from "../Categories/Category";
@@ -31,7 +32,7 @@ export default function Expenses(props) {
         return (
             <div className="expenses">
                 {/* add animation that moves expenses and returns to categories */}
-                <i className="fas fa-arrow-left"></i>
+                <Link to="/"><i className="fas fa-arrow-left"></i></Link>
                 <h1>Expenses</h1>
                 <Category name={currentCategory.name} total={currentCategory.total} available={available} />
                 <table style={styles.table} cellSpacing="0">
@@ -45,7 +46,7 @@ export default function Expenses(props) {
                             <tr>
                                 <td style={styles.row}>{expense.date}</td>
                                 <td style={styles.row}>{expense.expense}</td>
-                                <td style={{color: expense.type === "credit" ? "#75E68B" : "#DE3C35", textAlign: "center", padding: ".5em"}}>{`$${expense.amount.toFixed(2)}`}</td>
+                                <td style={{color: expense.type === "credit" ? "#1D4A21" : "#DE3C35", textAlign: "center", padding: ".5em"}}>{`$${expense.amount.toFixed(2)}`}</td>
                             </tr>
                         )
                     })}

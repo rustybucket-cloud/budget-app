@@ -1,5 +1,11 @@
 .AddExpense {
     margin-left: 1em;
+    width: 100%;
+    margin: auto;
+    max-width: 36rem;
+    border: 1px solid white;
+    padding: 1rem;
+    border-radius: 10px;
 }
 .AddExpense * {
     display: block;
@@ -10,4 +16,8 @@
 .AddExpense select, .AddExpense input, .AddExpense button {
     padding: .5em;
     font-size: 1em;
+    width: 100%;
+}
+.AddExpense button {
+    margin-top: .5rem;
 }

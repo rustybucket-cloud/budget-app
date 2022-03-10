@@ -14,6 +14,7 @@ export default function Categories(props) {
     const state = useSelector(state => state.categories)
     const totalState = useSelector(state => state.total)
     const searched = useSelector(state => state.searched)
+    const loggedIn = useSelector(state => state.login)
     const dispatch = useDispatch()
 
     const [ categories, setCategories ] = useState(null)
@@ -21,10 +22,21 @@ export default function Categories(props) {
     const [ available, setAvailable ] = useState(0)
 
     useEffect(() => {
+        if (!loggedIn) console.log("not logged in")
+
         props.setActive("categories") // sets nav wayfinding
 
         async function getData() {
             try {
+                const login = await fetch("./login", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({username: 'email1@email.com', password: '123456'})
+                })
+                const userInfo = login.json()
+                console.log(userInfo)
                 const response = await fetch('./categories', {
                 method: "POST"
                 })

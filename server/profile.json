@@ -1,0 +1,14 @@
+{
+    "profiles": [
+        {
+            "username": "pattonja",
+            "email": "email@email.com",
+            "password": "password"
+        },
+        {
+            "username": "account2",
+            "email": "email2@email.com",
+            "password": "password" 
+        }
+    ]
+}

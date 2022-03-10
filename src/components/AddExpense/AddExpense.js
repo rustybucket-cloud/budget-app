@@ -59,34 +59,34 @@ export default function AddExpense(props) {
 
     if (categoryList) {
         return (
-            <div className="AddExpense">
-                <h1>Add Exppense</h1>
-                <label>Category
-                    <select id="add-expense-category" onChange={handleChange} value={selectedCategory}>
-                        <option value="select one">Select One</option>
-                        {categoriesState.map( category => {
-                            return <option>{category.name}</option>
-                        })}
-                    </select>
-                </label>
-                <label>Date
-                    <input type="date" id="add-expense-date"  onChange={handleChange} />
-                </label>
-                <label>Expense Type
-                    <select id="add-expense-type" onChange={handleChange} value={expenseType}>
-                        <option value="select one">Select One</option>
-                        <option value="debit">Debit</option>
-                        <option value="credit">Credit</option>
-                    </select>
-                </label>
-                <label>Expense Name
-                    <input id="add-expense-name" onChange={handleChange} value={expenseName}/>
-                </label>
-                <label>Expense Amount
-                        <input type="number" id="add-expense-amount" onChange={handleChange} value={expenseAmount}/>
-                </label>
-                <button onClick={handleClick}>Add Expense</button>
-            </div>
+                <form className="AddExpense">
+                    <h1>Add Exppense</h1>
+                    <label>Category
+                        <select id="add-expense-category" onChange={handleChange} value={selectedCategory}>
+                            <option value="select one">Select One</option>
+                            {categoriesState.map( category => {
+                                return <option>{category.name}</option>
+                            })}
+                        </select>
+                    </label>
+                    <label>Date
+                        <input type="date" id="add-expense-date"  onChange={handleChange} />
+                    </label>
+                    <label>Expense Type
+                        <select id="add-expense-type" onChange={handleChange} value={expenseType}>
+                            <option value="select one">Select One</option>
+                            <option value="debit">Debit</option>
+                            <option value="credit">Credit</option>
+                        </select>
+                    </label>
+                    <label>Expense Name
+                        <input id="add-expense-name" onChange={handleChange} value={expenseName}/>
+                    </label>
+                    <label>Expense Amount
+                            <input type="number" id="add-expense-amount" onChange={handleChange} value={expenseAmount}/>
+                    </label>
+                    <button onClick={handleClick}>Add Expense</button>
+                </form>
         )
     }
     else return null

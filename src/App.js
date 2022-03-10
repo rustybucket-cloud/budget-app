@@ -7,6 +7,8 @@ import Header from './components/Header/Header';
 import Categories from './components/Categories/Categories';
 import Expenses from './components/Expenses/Expenses';
 import AddExpense from './components/AddExpense/AddExpense';
+import Login from './components/Profile/Login';
+import Signup from './components/Profile/Signup';
 
 function App() {
   // used to open mobile menu
@@ -24,6 +26,8 @@ function App() {
             <Route path="/" element={<Categories setCategory={setCategory} setActive={setActive} />} />
             <Route path="/expenses" element={<Expenses category={category} />} />
             <Route path="/addexpense" element={<AddExpense setActive={setActive} />}  />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />}/>
           </Routes>
           </main>
         </BrowserRouter>

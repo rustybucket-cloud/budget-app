@@ -39,7 +39,8 @@ const styles = {
     category: {
         boxShadow: "0 0 10px 2px rgba(0, 0, 0, .5)",
         marginTop: ".5em",
-        padding: ".5em"
+        padding: ".5em",
+        backgroundColor: "#4CC2BC"
     },
     info: {
         display: "flex",
