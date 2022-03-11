@@ -39,47 +39,84 @@ app.post('/addcategory', async (req,res) => {
   const categoryName = req.body.categoryName
   const total = req.body.total
 
+  let categoryData
   try {
-    await dataFunctions.addExpenseCategory(id, categoryName, total)
+    categoryData = await dataFunctions.addCategory(id, categoryName, total)
   } catch(err) {
     console.error(err)
     res.send('error')
     return
   } finally {
-    res.status(200).send('category added')
+    res.status(200).send(categoryData)
+  }
+})
+
+app.put('/updatecategory', async (req, res) => {
+  const category_id = req.body.category_id
+  const updated_column = req.body.updated_column
+  const new_column_value = req.body.new_column_value
+
+  console.log(category_id, updated_column, new_column_value)
+
+  let updateData
+  try {
+    updateData = await dataFunctions.updateCategory(category_id, updated_column, new_column_value)
+  } catch (err) {
+    console.error(err)
+    res.send(err)
+    return
+  } finally {
+    res.send(updateData)
   }
 })
 
 app.post('/addexpense', async (req, res) => {
-  const id = req.body.id
-  const category = req.body.category
-  const date = req.body.data
-  const expense = req.body.expense
+  const user_id = req.body.user_id
+  const category_id = req.body.category_id
+  const date = req.body.date
+  const expense_name = req.body.expense_name
   const amount = req.body.amount
 
+  let expenseData
   try {
-    await dataFunctions.addExpense(id, category, expense, amount)
+    expenseData = await dataFunctions.addExpense(user_id, category_id, date, expense_name, amount)
   } catch(err) {
     console.error(err)
     res.send('error')
     return
   } finally {
-    res.status(200).send('expense added')
+    res.status(200).send(expenseData)
   }
 })
 
-app.get('/viewexpenses/:id/:category', async (req, res) => {
-  const id = req.params.id
-  const category = req.params.category
+app.get('/viewexpenses/:categoryid', async (req, res) => {
+  const category_id = req.params.categoryid
 
   let expenses
   try {
-    expenses = await dataFunctions.viewExpenses(id, category)
+    expenses = await dataFunctions.viewExpenses(category_id)
   } catch(err) {
     res.send('error')
     return
   } finally {
     res.send(expenses)
+  }
+})
+
+app.put('/updateexpense', async (req, res) => {
+  const expense_id = req.body.expense_id
+  const updated_column = req.body.updated_column
+  const new_column_value = req.body.new_column_value
+
+  let updateData
+  try {
+    updateData = await dataFunctions.updateExpense(expense_id, updated_column, new_column_value)
+  } catch (err) {
+    console.error(err)
+    res.send(err)
+    return
+  } finally {
+    res.send(updateData)
   }
 })
 

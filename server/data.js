@@ -7,14 +7,21 @@ const saltRounds = 10
     Users
     id PRIMARY KEY NOT NULL     email TEXT NOT NULL     password TEXT NOT NULL  
     
-    Categories_[user id]
-    id PRIMARY KEY NOT NULL     category TEXT NOT NULL      total FLOAT       remaining FLOAT
+    Categories
+    id PRIMARY KEY NOT NULL     user_id INT NOT NULL     category_name TEXT NOT NULL      total FLOAT       remaining FLOAT
     
-    Expenses_[category name]_[user id]      
-    id PRIMARY KEY NOT NULL     expense TEXT NOT NULL       amount FLOAT NOT NULL
+    Expenses     
+    id PRIMARY KEY NOT NULL     user_id INT NOT NULL    category_id INT NOT NULL     expense_name TEXT NOT NULL       amount FLOAT NOT NULL
 */
 module.exports = {
     addUser: async (email, password) => { // add to database
+        db.run("CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY AUTOINCREMENT, email UNIQUE NOT NULL, password NOT NULL)", (err) => {
+            if (err) {
+                console.error(err)
+                return
+            }
+        })
+
         // generate a hashed password
         const saltRounds = 10
         const hashPassword = () => {
@@ -54,23 +61,10 @@ module.exports = {
                             $email: email,
                             $password: password
                         },
-                        err => {
+                        function(err, result) {
                             if (err) reject(err)
-                        }
-                    )
-                    // get user id
-                    db.get("SELECT id, email FROM Users WHERE email=$email", { $email:email }, 
-                        (err, row) => {
-                            if (err) reject(err)
-                            // create user expenses table
-                            db.run(`CREATE TABLE Categories_${row.id} (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT NOT NULL, total FLOAT, remaining FLOAT)`,
-                                (err) => {
-                                    if (err) reject(err)
-                                    else resolve(row)
-                                }
-                            )
-                        }
-                    )
+                            resolve({id: this.lastID, email})
+                        })
                 })
             })
         }
@@ -103,20 +97,16 @@ module.exports = {
     },
 
     // adds category to user category table
-    addExpenseCategory: (user, category, total) => {
+    addCategory: (user, category, total) => {
         return new Promise((resolve, reject) => {
             db.serialize(() => {
-                db.run(`INSERT INTO Categories_${user} (category, total, remaining) VALUES ($category, $total, $total)`, { $category: category, $total: total },
-                    (err) => {
+                db.run("CREATE TABLE IF NOT EXISTS Categories (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INT NOT NULL, category_name TEXT NOT NULL, total FLOAT, remaining FLOAT)", (err) => {
+                    if (err) reject(err)
+                })
+                db.run("INSERT INTO Categories (user_id, category_name, total, remaining) VALUES ($user_id, $category_name, $total, $total)", {$user_id:user, $category_name: category, $total: total },
+                    function(err, result) {
                         if (err) reject(err)
-                        else console.log(`Expense category ${category} added.`)
-                    }
-                )
-                db.run(`CREATE TABLE Category_${user}_${category} 
-                (id INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT NOT NULL, date DATE NOT NULL, expense TEXT NOT NULL, amount FLOAT NOT NULL)`, 
-                    (err) => {
-                        if (err) reject(err)
-                        else resolve(`${category} category table created for ${user}`)
+                        else resolve({user_id: user, category_id: this.lastID, category_name: category})
                     }
                 )
             })
@@ -126,40 +116,92 @@ module.exports = {
     // display all of a users budget categories
     viewCategoryies: (user) => {
         return new Promise((response, reject) => {
-            db.all(`SELECT category, total, remaining FROM Categories_${user}` ,
-                (err, row) => {
+            db.all(`
+            SELECT *
+            FROM Categories
+            WHERE user_id=$user_id`, { $user_id: user },
+            (err, row) => {
+                if (err) reject(err)
+                else response(row)
+            }
+            )
+        })
+    },
+
+    updateCategory: (category_id, updated_column, new_column_value) => {
+        return new Promise((resolve, reject) => {
+            db.run(`
+                UPDATE Categories
+                SET ${updated_column} = $new_column_value
+                WHERE id=$category_id`, {
+                    $category_id: category_id,
+                    $new_column_value: new_column_value
+                }, 
+                function(err, results) {
                     if (err) reject(err)
-                    else response(row)
+                    else resolve({result: "success"})
                 }
             )
         })
     },
 
     // adds expense to selected category of selected user
-    addExpense: (user, category, expense, amount) => {
+    addExpense: (user, category, date, expense, amount) => {
         return new Promise((resolve, reject) => {
-            db.run(`INSERT INTO Category_${user}_${category} (expense, amount)
-            VALUES ('${expense}', ${parseFloat(amount)})`,
-                (err) => {
-                    if (err) {
-                        if (err.erno === 1) reject(400)
-                        else reject(500)
+            db.serialize(() => {
+                db.run("CREATE TABLE IF NOT EXISTS Expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INT NOT NULL, category_id INT NOT NULL, date DATE, expense_name TEXT NOT NULL, amount FLOAT)", (err) => {
+                    if (err) reject(err)
+                })
+                db.run(`
+                    INSERT INTO EXPENSES 
+                    (user_id, category_id, date, expense_name, amount)
+                    VALUES ($user_id, $category_id, $date, $expense_name, $amount)
+                    `, {
+                        $user_id: user,
+                        $category_id: category,
+                        $date: date,
+                        $expense_name: expense,
+                        $amount: amount
+                    },
+                    function(err, result) {
+                        if (err) reject(err)
+                        else resolve({expense_id: this.lastID, category_id: category, expense_name: expense})
                     }
-                    else resolve(`Expense added to ${category}.`)
+                )
+            })
+        })
+    },
+
+    // view expenses of selected category
+    viewExpenses: (category_id) => {
+        return new Promise((resolve, reject) => {
+            db.all(`
+                SELECT * 
+                FROM Expenses
+                WHERE category_id=$category_id
+                `, {
+                    $category_id: category_id
+                },
+                (err, rows) => {
+                    if (err) reject(err)
+                    else resolve(rows)
                 }
             )
         })
     },
 
-    // view expenses of selected category
-    viewExpenses: (user, category) => {
+    updateExpense: (expense_id, updated_column, new_column_value) => {
         return new Promise((resolve, reject) => {
-            db.all(`SELECT * FROM Category_${user}_${category}`, 
-                (err, rows) => {
+            db.run(`
+                UPDATE Expenses
+                SET ${updated_column} = $new_column_value
+                WHERE id=$expense_id`, {
+                    $expense_id: expense_id,
+                    $new_column_value: new_column_value
+                }, 
+                function(err, results) {
                     if (err) reject(err)
-                    else {
-                        resolve(rows)
-                    }
+                    else resolve({result: "success"})
                 }
             )
         })

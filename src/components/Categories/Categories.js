@@ -70,7 +70,7 @@ export default function Categories(props) {
 
     if (state) {
         return (
-            <div>
+            <>
                 <h1>Categories</h1>
                 <Category name="Total" totalCategory={true} total={totalState.total} available={totalState.available} />
                 {state.map( category => {
@@ -80,7 +80,8 @@ export default function Categories(props) {
                     })
                    return <Category name={category.name} totalCategory={false} total={category.total} available={available} setCategory={props.setCategory}/> 
                 })}
-            </div>
+                <button>Add Category</button>
+            </>
         )
     }
     else {
