@@ -1,11 +1,13 @@
 import "./Profile.css"
 import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/auth";
 
 import { useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import login from "../../redux/actions/login";
 import logout from "../../redux/actions/logout";
+import e from "express";
 
 export default function Login() {
     const [ username, setUsername ] = useState(null)
@@ -13,18 +15,12 @@ export default function Login() {
 
     const loggedIn = useSelector(state => state.login)
 
+    const { currentUser, loginUser } = useAuth()
+
     // http request to login user
-    const handleClick = () => {
-        fetch("./login", {
-            method: "POST",
-            headers: {"Content-type": "application/json; charset=UTF-8"},
-            body: JSON.stringify({username: username, password: password})
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) console.log(data.error)
-            else console.log(data)
-        })
+    const handleClick = async (e) => {
+        e.preventDefault()
+        await loginUser(username, password)
     }
 
     const handleChange = ({currentTarget}) => {
@@ -37,6 +33,7 @@ export default function Login() {
 
     return (
         <div className="login">
+            {currentUser && <p>{currentUser.email}</p>}
             <h1>Login</h1>
             <form>
                 <label>Username or Email

@@ -1,0 +1,38 @@
+$primary-color: #60DB90;
+$secondary-color: #4CC2BC;
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+body {
+  background-color: $primary-color;
+}
+main {
+  max-width: 960px;
+  margin: auto;
+}
+.add-category-button {
+  padding: .5rem 1rem;
+  margin-top: .5rem;
+  background-color: $secondary-color;
+  border: none;
+
+  &:hover { background-color: darken($secondary-color, 10%); }
+
+  &:focus { background-color: lighen($secondary-color, 10%); }
+}
+
+
+@media screen and (min-width: 650px) {
+  main {
+    padding: 0 1em;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+}
+@media screen and (max-width: 649px) {
+  main h1 {
+    margin-left: .5em;
+  }
+}

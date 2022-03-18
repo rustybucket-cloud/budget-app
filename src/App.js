@@ -1,7 +1,8 @@
-import './App.css';
+import './App.scss';
 
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Redirect } from 'react-router-dom';
+import { AuthProvider } from './contexts/auth';
 
 import Header from './components/Header/Header';
 import Categories from './components/Categories/Categories';
@@ -19,6 +20,7 @@ function App() {
 
   return (
     <div className="App">
+      <AuthProvider>
         <BrowserRouter>
           <Header setNav={setNav} nav={nav} active={active}/>
           <main className={nav ? "slide" : "slideBack"}>
@@ -31,6 +33,7 @@ function App() {
           </Routes>
           </main>
         </BrowserRouter>
+      </AuthProvider>
     </div>
   );
 }

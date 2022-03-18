@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router"
 
 import addCategory from "../../redux/actions/addCategory"
 import removeCategory from "../../redux/actions/removeCategory"
@@ -11,6 +12,7 @@ import setSearched from "../../redux/actions/setSearched"
 import Category from "./Category"
 
 export default function Categories(props) {
+    const [ currentUser, setCurrentUser ] = useState(null)
     const state = useSelector(state => state.categories)
     const totalState = useSelector(state => state.total)
     const searched = useSelector(state => state.searched)
@@ -21,8 +23,10 @@ export default function Categories(props) {
     const [ total, setTotal ] = useState(0)
     const [ available, setAvailable ] = useState(0)
 
+    const navigate = useNavigate()
+
     useEffect(() => {
-        if (!loggedIn) console.log("not logged in")
+        currentUser || navigate("./login")
 
         props.setActive("categories") // sets nav wayfinding
 
@@ -80,7 +84,7 @@ export default function Categories(props) {
                     })
                    return <Category name={category.name} totalCategory={false} total={category.total} available={available} setCategory={props.setCategory}/> 
                 })}
-                <button>Add Category</button>
+                <button className="add-category-button">Add Category</button>
             </>
         )
     }

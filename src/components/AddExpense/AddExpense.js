@@ -1,4 +1,4 @@
-import "./AddExpense.css"
+import "./AddExpense.scss"
 import { useSelector, useDispatch } from "react-redux"
 import { useState, useEffect } from "react"
 

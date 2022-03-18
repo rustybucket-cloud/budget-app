@@ -11,7 +11,7 @@ const dataFunctions = require("./data.js")
 let loggedIn = "pattonja";
 
 app.listen(PORT, console.log(`Listening on port ${PORT}`))
-app.use('/static', express.static(path.join(__dirname, '../build//static')));
+//app.use('/static', express.static(path.join(__dirname, '../build//static')));
 app.use(express.urlencoded({extended: false}))
 app.use(express.json());
 app.get('/', function(req, res) {
@@ -22,7 +22,7 @@ app.post('/categories', (req, res) => {
   res.send(data[loggedIn])
 })
 
-app.get('/viewcategories/:id', async (req, res) => {
+app.get('/categories/:id', async (req, res) => {
   const id = req.params.id
   let categories
   try {
@@ -34,7 +34,7 @@ app.get('/viewcategories/:id', async (req, res) => {
   }
 })
 
-app.post('/addcategory', async (req,res) => {
+app.post('/category', async (req,res) => {
   const id = req.body.id
   const categoryName = req.body.categoryName
   const total = req.body.total
