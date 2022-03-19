@@ -1,26 +1,25 @@
 import "./Profile.css"
 import { Link } from "react-router-dom";
-import { useAuth } from "../../contexts/auth";
+import { useAuth } from "../../contexts/Auth";
 
 import { useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import login from "../../redux/actions/login";
 import logout from "../../redux/actions/logout";
-import e from "express";
 
 export default function Login() {
-    const [ username, setUsername ] = useState(null)
-    const [ password, setPassword ] = useState(null)
+    const [ username, setUsername ] = useState('')
+    const [ password, setPassword ] = useState('')
 
     const loggedIn = useSelector(state => state.login)
 
-    const { currentUser, loginUser } = useAuth()
+    const { currentUser, logInUser } = useAuth()
 
     // http request to login user
     const handleClick = async (e) => {
         e.preventDefault()
-        await loginUser(username, password)
+        await logInUser(username, password)
     }
 
     const handleChange = ({currentTarget}) => {

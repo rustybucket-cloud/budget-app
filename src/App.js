@@ -2,7 +2,7 @@ import './App.scss';
 
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Redirect } from 'react-router-dom';
-import { AuthProvider } from './contexts/auth';
+import { AuthProvider } from './contexts/Auth';
 
 import Header from './components/Header/Header';
 import Categories from './components/Categories/Categories';
