@@ -13,7 +13,7 @@ export default function Category(props) {
     const handleClick = () => {
         if (!props.totalCategory) {
             props.setCategory(props.name)
-            navigate("./expenses") 
+            navigate(`./expenses/${props.name}`) 
         }
     }
 

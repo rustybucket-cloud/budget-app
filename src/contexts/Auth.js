@@ -12,12 +12,13 @@ export function AuthProvider({children}) {
 
     async function logInUser(email, password) {
         try {
-            const response = await fetch("https://budget-app-rustybucket.herokuapp.com/login", {
+            const response = await fetch("http://localhost:5000/login", {
                 method: "POST",
                 headers: {"Content-type": "application/json; charset=UTF-8"},
-                body: JSON.stringify({username: email, password: password})
+                body: JSON.stringify({email: email, password: password})
             }) 
             const data = await response.json()
+            console.log(data, "login")
             setCurrentUser(data)
         } catch(err) {
             console.error(err)
@@ -29,7 +30,7 @@ export function AuthProvider({children}) {
 
     async function signUpUser(email, password) {
         try {
-            const response = await fetch("http://localhost:3000/signup", {
+            const response = await fetch("http://localhost:5000/signup", {
                 method: "POST",
                 headers: {"Content-type": "application/json; charset=UTF-8"},
                 body: JSON.stringify({email: email, password: password})

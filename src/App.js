@@ -26,7 +26,7 @@ function App() {
           <main className={nav ? "slide" : "slideBack"}>
           <Routes>
             <Route path="/" element={<Categories setCategory={setCategory} setActive={setActive} />} />
-            <Route path="/expenses" element={<Expenses category={category} />} />
+            <Route path="/expenses/:name" element={<Expenses category={category} />} />
             <Route path="/addexpense" element={<AddExpense setActive={setActive} />}  />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />}/>

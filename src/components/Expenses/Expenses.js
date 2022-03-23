@@ -1,60 +1,55 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useAuth } from "../../contexts/Auth";
 import "./Expenses.css"
-
 import Category from "../Categories/Category";
+import useExpenses from "../../hooks/useExpenses";
 
 export default function Expenses(props) {
-    const [ available, setAvailable ] = useState(0)
-    const [ currentCategory, setCurrentCategory ] = useState(null)
+    const { name } = useParams()
+    const { data, isLoading } = useExpenses('expenses', name)
 
-    const categories = useSelector(state => state.categories)
-
-    // find category object that has the same name as selected category
-    useEffect(() => {
-        let selected = categories.find(cat => cat.name === props.category)
-        setCurrentCategory(selected) 
-    }, [])
-
-    // calculate available from each expense
-    useEffect(() => {
-        if (currentCategory) {
-            let totalExpenses = 0
-            currentCategory.expenses.forEach( expense => {
-                totalExpenses += expense.type === "credit" ? expense.amount : -(expense.amount)
-            }) 
-            setAvailable(totalExpenses)
-        }
-    }, [currentCategory])
-
-    if (currentCategory) {
+    if (!isLoading) {
         return (
             <div className="expenses">
                 {/* add animation that moves expenses and returns to categories */}
                 <Link to="/"><i className="fas fa-arrow-left"></i></Link>
                 <h1>Expenses</h1>
-                <Category name={currentCategory.name} total={currentCategory.total} available={available} />
+                {data && <Category name={name} total={data.total} available={data.remaining} />}
                 <table style={styles.table} cellSpacing="0">
-                    <tr style={styles.header}>
-                        <th>Date</th>
-                        <th>Expense</th>
-                        <th>Amount</th>
-                    </tr>
-                    {currentCategory.expenses.map(expense => {
+                    <thead>
+                        <tr style={styles.header}>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {data && data.expenses.map((expense, i) => {
+                        const date = new Date(expense.date)
+                        const dateString = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`
                         return (
-                            <tr>
-                                <td style={styles.row}>{expense.date}</td>
-                                <td style={styles.row}>{expense.expense}</td>
-                                <td style={{color: expense.type === "credit" ? "#1D4A21" : "#DE3C35", textAlign: "center", padding: ".5em"}}>{`$${expense.amount.toFixed(2)}`}</td>
+                            <tr key={i}>
+                                <td style={styles.row}>{expense.expense_name}</td>
+                                <td style={styles.row}>{dateString}</td>
+                                <td style={{color: expense.amount < 0 ? "#1D4A21" : "#DE3C35", textAlign: "center", padding: ".5em"}}>{`$${expense.amount.toFixed(2)}`}</td>
                             </tr>
                         )
                     })}
+                    </tbody>
                 </table>
             </div>
         )
     }
-    else return null
+    else {
+        return (
+            <>
+                <h1>Expenses</h1>
+                <p>Loading...</p>
+            </>
+        )
+    }
 }
 
 const styles = {
