@@ -27,7 +27,7 @@ export default function Category(props) {
                 {
                 // if percentage is greater than 0 color is green, else it is red 
                 }
-                <div style={styles.percentageBar, {width: `${percentage * 100}%`, backgroundColor: percentage * 100 > 0 ? "#75E68B" : "#DE3C35", padding: ".25em"}}>
+                <div style={{width: `${percentage * 100}%`, backgroundColor: percentage * 100 > 0 ? "#75E68B" : "#DE3C35", padding: ".25em"}}>
                     <p style={styles.availableAmount}>{props.available}</p>
                 </div>
             </div>
