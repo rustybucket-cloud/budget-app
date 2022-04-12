@@ -2,8 +2,7 @@ import "./AddExpense.scss"
 import { useState, useEffect } from "react"
 
 export default function AddExpense(props) {
-    const [ categoryList, setCategoryList ] = useState(null)
-    const [ selectedCategory, setSelectedCategory ] = useState(null)
+    /* const [ selectedCategory, setSelectedCategory ] = useState(null)
     const [ expenseType, setExpenseType ] = useState(null)
     const [ expenseName, setExpenseName ] = useState(null)
     const [ expenseAmount, setExpenseAmount ] = useState(null)
@@ -11,10 +10,10 @@ export default function AddExpense(props) {
 
     useEffect(() => {
         props.setActive("addExpense") // sets nav wayfinding
-    })
+    }) */
 
     // sets state values
-    const handleChange = ({currentTarget}) => {
+   /*  const handleChange = ({currentTarget}) => {
         switch(currentTarget.id) {
             case "add-expense-category":
                 setSelectedCategory(currentTarget.value)
@@ -37,9 +36,9 @@ export default function AddExpense(props) {
             default:
                 console.error("Error in add expense handle change")
         }
-    }
+    } */
 
-    if (categoryList) {
+    /* if (categoryList) {
         return (
                 <form className="AddExpense">
                     <h1>Add Exppense</h1>
@@ -69,5 +68,6 @@ export default function AddExpense(props) {
                 </form>
         )
     }
-    else return null
+    else return null */
+    return null
 }

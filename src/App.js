@@ -1,7 +1,7 @@
 import './App.scss';
 
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/Auth';
 
 import Header from './components/Header/Header';

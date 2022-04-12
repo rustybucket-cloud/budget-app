@@ -24,7 +24,7 @@ export default function Categories(props) {
 
     useEffect(() => {
         currentUser || navigate("./login")
-    }, [currentUser])
+    }, [currentUser, navigate])
 
     // calculate total and remaining of total budget
     useEffect(() => {
@@ -54,6 +54,7 @@ export default function Categories(props) {
 
     const handleClick = () => {
         setDataToFetch({categoryName: name, amount})
+        console.log(isUpdateLoading, status)
     }
 
     if (!isLoading) {

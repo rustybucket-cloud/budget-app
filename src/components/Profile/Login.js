@@ -12,14 +12,14 @@ export default function Login() {
 
     useEffect(() => {
         const check = async () => {
-            const isLoggedIn = await checkIfLoggedIn()
+            await checkIfLoggedIn()
         }
         check()
-    }, [])
+    }, [checkIfLoggedIn])
 
     useEffect(() => {
         if (currentUser) navigate("/")
-    }, [currentUser])
+    }, [currentUser, navigate])
 
     // http request to login user
     const handleClick = async (e) => {
