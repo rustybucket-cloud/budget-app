@@ -8,7 +8,7 @@ export default function Category(props) {
 
     useEffect( () => {
         setPercentage(props.available / props.total)
-    }, [setPercentage])
+    }, [setPercentage, props.available, props.total])
 
     const handleClick = () => {
         if (!props.totalCategory) {

@@ -1,5 +1,5 @@
 import "./AddExpense.scss"
-import { useState, useEffect } from "react"
+
 
 export default function AddExpense(props) {
     /* const [ selectedCategory, setSelectedCategory ] = useState(null)

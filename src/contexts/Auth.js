@@ -45,7 +45,7 @@ export function AuthProvider({children}) {
 
     async function signUpUser(email, password) {
         try {
-            const response = await fetch("/signup", {
+            await fetch("/signup", {
                 method: "POST",
                 headers: {"Content-type": "application/json; charset=UTF-8"},
                 body: JSON.stringify({email: email, password: password})
