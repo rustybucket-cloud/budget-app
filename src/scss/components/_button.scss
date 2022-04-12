@@ -1,0 +1,12 @@
+@use "../abstracts/color";
+
+.btn {
+    padding: .5rem 1rem;
+    width: 100%;
+    background-color: color.$secondary;
+    border: none;
+    margin-top: 1rem;
+
+    &:hover { background-color: lighten(color.$secondary, 10%); }
+    &:active { background-color: darken(color.$secondary, 10%); }
+}

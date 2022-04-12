@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { useAuth } from "../../contexts/Auth";
 import "./Expenses.css"
 import Category from "../Categories/Category";
 import useExpenses from "../../hooks/useExpenses";
@@ -41,8 +40,7 @@ export default function Expenses(props) {
                 </table>
             </div>
         )
-    }
-    else {
+    } else {
         return (
             <>
                 <h1>Expenses</h1>

@@ -1,0 +1,12 @@
+@use "../abstracts/color";
+.form {
+    width: 100%;
+    max-width: 480px;
+    padding: 2rem;
+    * { display: block; }
+    background-color: color.$secondary;
+    input, .btn {
+        padding: .5rem 1rem;
+        width: 100%;
+    }
+}

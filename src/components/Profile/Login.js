@@ -13,8 +13,16 @@ export default function Login() {
 
     //const loggedIn = useSelector(state => state.login)
 
-    const { currentUser, logInUser } = useAuth()
+    const { currentUser, logInUser, checkIfLoggedIn } = useAuth()
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const check = async () => {
+            const isLoggedIn = await checkIfLoggedIn()
+        }
+        check()
+    }, [])
+
     useEffect(() => {
         if (currentUser) navigate("/")
     }, [currentUser])

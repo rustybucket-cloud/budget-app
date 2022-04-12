@@ -1,15 +1,15 @@
 import './App.scss';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Redirect } from 'react-router-dom';
 import { AuthProvider } from './contexts/Auth';
 
 import Header from './components/Header/Header';
-import Categories from './components/Categories/Categories';
-import Expenses from './components/Expenses/Expenses';
-import AddExpense from './components/AddExpense/AddExpense';
-import Login from './components/Profile/Login';
-import Signup from './components/Profile/Signup';
+const Categories = React.lazy(() => import('./components/Categories/Categories'));
+const Expenses = React.lazy(() => import('./components/Expenses/Expenses'));
+const AddExpense = React.lazy(() => import('./components/AddExpense/AddExpense'));
+const Login = React.lazy(() => import('./components/Profile/Login'));
+const Signup = React.lazy(() => import('./components/Profile/Signup'));
 
 function App() {
   // used to open mobile menu
@@ -24,13 +24,15 @@ function App() {
         <BrowserRouter>
           <Header setNav={setNav} nav={nav} active={active}/>
           <main className={nav ? "slide" : "slideBack"}>
-          <Routes>
-            <Route path="/" element={<Categories setCategory={setCategory} setActive={setActive} />} />
-            <Route path="/expenses/:name" element={<Expenses category={category} />} />
-            <Route path="/addexpense" element={<AddExpense setActive={setActive} />}  />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />}/>
-          </Routes>
+          <React.Suspense fallback={<p>Loading</p>}>
+            <Routes>
+              <Route path="/" element={<Categories setCategory={setCategory} setActive={setActive} />} />
+              <Route path="/expenses/:name" element={<Expenses category={category} />} />
+              <Route path="/addexpense" element={<AddExpense setActive={setActive} />}  />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />}/>
+            </Routes>
+          </React.Suspense>
           </main>
         </BrowserRouter>
       </AuthProvider>

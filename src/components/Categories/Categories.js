@@ -1,34 +1,24 @@
 import { useState, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router"
 import useExpenses from "../../hooks/useExpenses"
 import { useAuth } from "../../contexts/Auth"
-
-import addCategory from "../../redux/actions/addCategory"
-import removeCategory from "../../redux/actions/removeCategory"
-import resetCategories from "../../redux/actions/resetCategories"
-import updateTotal from "../../redux/actions/updateTotal"
-import updateAvailable from "../../redux/actions/updateAvailable"
-import setSearched from "../../redux/actions/setSearched"
+import useUpdateData from "../../hooks/useUpdateData"
 
 import Category from "./Category"
 
 export default function Categories(props) {
-    //const [ currentUser, setCurrentUser ] = useState(null)
-    /* const state = useSelector(state => state.categories)
-    const totalState = useSelector(state => state.total)
-    const searched = useSelector(state => state.searched)
-    const loggedIn = useSelector(state => state.login)
-    const dispatch = useDispatch() */
     const [total, setTotal] = useState(0)
     const [remaining, setRemaining] = useState(0)
+    const [ isOpenForm, setIsOpenForm ] = useState(false)
+    const [ isHidden, setIsHidden ] = useState(true)
+    const [ name, setName ]= useState('')
+    const [ amount, setAmount ] = useState('')
+    const [ dataToFetch, setDataToFetch ] = useState(null)
 
     const { currentUser } = useAuth()
     const { isLoading, data } =  useExpenses('categories')
 
-    /* const [ categories, setCategories ] = useState(null)
-    const [ total, setTotal ] = useState(0)
-    const [ available, setAvailable ] = useState(0) */
+    const { isUpdateLoading, status } = useUpdateData('categories', 'POST', dataToFetch)
 
     const navigate = useNavigate()
 
@@ -50,15 +40,47 @@ export default function Categories(props) {
         }
     }, [data])
 
+    const showAndHideForm = () => {
+        if (isOpenForm) { // hide
+            setIsOpenForm(false)
+            // delay so animation can run
+            setTimeout(() => setIsHidden(true), 1000)
+        } else { // show
+            setIsHidden(false)
+            // delay so animation can run
+            setTimeout(() => setIsOpenForm(true), 50)
+        }
+    }
+
+    const handleClick = () => {
+        setDataToFetch({categoryName: name, amount})
+    }
+
     if (!isLoading) {
         return (
             <>
                 <h1>Categories</h1>
                 <Category name="Total" totalCategory={true} total={total} available={remaining} />
-                {data && data.map( category => {
-                   return <Category id={category.id} name={category.category_name} totalCategory={false} total={category.total} available={category.remaining} setCategory={props.setCategory}/> 
+                {data && data.map( (category, i) => {
+                   return <Category key={i} id={category.id} name={category.category_name} totalCategory={false} total={category.total} available={category.remaining} setCategory={props.setCategory}/> 
                 })}
-                <button className="add-category-button">Add Category</button>
+                <button 
+                    className={`btn categories__btn ${isOpenForm ? 'closed' : null} ${ isHidden ? 'hidden' : null }`}
+                    onClick={showAndHideForm}
+                >
+                {!isOpenForm ? 'Add Category' : 'X'}
+                </button>
+                <form 
+                    className={`categories__form form ${isOpenForm ? 'open' : null} ${ isHidden ? 'hidden' : null }`}
+                >
+                    <label  htmlFor="categoryNameInput">Category Name
+                        <input value={name} onChange={({currentTarget}) => setName(currentTarget.value)} type="text" id="categoryNameInput" disabled={isHidden} />
+                    </label>
+                    <label htmlFor="total">Total
+                        <input value={amount} onChange={({currentTarget}) => setAmount(currentTarget.value)} type="number" id="total" disabled={isHidden} />
+                    </label>
+                    <button className="btn" type="button" onClick={handleClick}>ADD CATEGORY</button>
+                </form>
             </>
         )
     } else {

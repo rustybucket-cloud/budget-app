@@ -8,13 +8,8 @@ export default function useExpenses(request_type, category_name = null) {
 
     useEffect(() => {
         if (currentUser) {
-            const endPoint = request_type === 'expenses' ? `categoryinfo/${currentUser.id}/${category_name}` : `categories/${currentUser.id}`
-            fetch(`http://localhost:5000/${endPoint}`, {
-                method: 'get',
-                header: {
-                    'Content-Type': 'application/json'
-                },
-            })
+            const endPoint = request_type === 'expenses' ? `/categoryinfo/${category_name}` : `/api/categories/${currentUser.id}`
+            fetch(`${endPoint}`)
             .then(response => response.json())
             .then(data => {
                 setData(data)

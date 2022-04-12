@@ -17,8 +17,8 @@ export default function Category(props) {
         }
     }
 
-    return (
-        <div className="category" style={styles.category} onClick={handleClick}>
+    return percentage ?  (
+        <button className="category" style={styles.category} onClick={handleClick} aria-label={`${props.name} category`}>
             <div style={styles.info}>
                 <p>{props.name}</p>
                 <p>{props.total}</p>
@@ -31,8 +31,8 @@ export default function Category(props) {
                     <p style={styles.availableAmount}>{props.available}</p>
                 </div>
             </div>
-        </div>
-    )
+        </button>
+    ) : null
 }
 
 const styles = {

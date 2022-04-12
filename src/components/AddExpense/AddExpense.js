@@ -75,8 +75,8 @@ export default function AddExpense(props) {
                     <label>Expense Type
                         <select id="add-expense-type" onChange={handleChange} value={expenseType}>
                             <option value="select one">Select One</option>
-                            <option value="debit">Debit</option>
-                            <option value="credit">Credit</option>
+                            <option value="debit">Expense</option>
+                            <option value="credit">Income</option>
                         </select>
                     </label>
                     <label>Expense Name
