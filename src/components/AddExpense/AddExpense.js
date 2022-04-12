@@ -1,13 +1,7 @@
 import "./AddExpense.scss"
-import { useSelector, useDispatch } from "react-redux"
 import { useState, useEffect } from "react"
 
-import addExpense from "../../redux/actions/addExpense"
-
 export default function AddExpense(props) {
-    const categoriesState = useSelector(state => state.categories)
-    const dispatch = useDispatch()
-
     const [ categoryList, setCategoryList ] = useState(null)
     const [ selectedCategory, setSelectedCategory ] = useState(null)
     const [ expenseType, setExpenseType ] = useState(null)
@@ -16,7 +10,6 @@ export default function AddExpense(props) {
     const [ expenseDate, setExpenseDate ] = useState(null)
 
     useEffect(() => {
-        setCategoryList(categoriesState)
         props.setActive("addExpense") // sets nav wayfinding
     })
 
@@ -46,17 +39,6 @@ export default function AddExpense(props) {
         }
     }
 
-    // add expense to redux, create an object with info
-    const handleClick = () => {
-        dispatch(addExpense({category: selectedCategory, expense: expenseName, date: expenseDate, type: expenseType, amount: parseFloat(expenseAmount)}))
-        // reset inputs
-        setSelectedCategory("select one")
-        setExpenseDate("")
-        setExpenseType("select one")
-        setExpenseName("")
-        setExpenseAmount("")
-    }
-
     if (categoryList) {
         return (
                 <form className="AddExpense">
@@ -64,9 +46,7 @@ export default function AddExpense(props) {
                     <label>Category
                         <select id="add-expense-category" onChange={handleChange} value={selectedCategory}>
                             <option value="select one">Select One</option>
-                            {categoriesState.map( category => {
-                                return <option>{category.name}</option>
-                            })}
+                           
                         </select>
                     </label>
                     <label>Date
@@ -85,7 +65,7 @@ export default function AddExpense(props) {
                     <label>Expense Amount
                             <input type="number" id="add-expense-amount" onChange={handleChange} value={expenseAmount}/>
                     </label>
-                    <button onClick={handleClick}>Add Expense</button>
+                    <button>Add Expense</button>
                 </form>
         )
     }

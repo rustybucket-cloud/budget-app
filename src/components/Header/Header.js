@@ -1,15 +1,9 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import "./Header.css"
 
 export default function Header(props) {
     const handleClick = () => {
         props.setNav(!props.nav)
-    }
-
-    const handleRedirect = ({ currentTarget }) => {
-        console.log(currentTarget.id)
-        //navigate(`/${currentTarget.id}`)
     }
 
     return (

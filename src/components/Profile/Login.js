@@ -3,15 +3,9 @@ import { useAuth } from "../../contexts/Auth";
 
 import { useState, useEffect } from "react";
 
-import { useSelector, useDispatch } from "react-redux";
-import login from "../../redux/actions/login";
-import logout from "../../redux/actions/logout";
-
 export default function Login() {
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
-
-    //const loggedIn = useSelector(state => state.login)
 
     const { currentUser, logInUser, checkIfLoggedIn } = useAuth()
     const navigate = useNavigate()

@@ -8,7 +8,6 @@ export function useAuth() {
 
 export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState(null)
-    const [loading, setLoading] = useState(true)
 
     async function checkIfLoggedIn() {
         return new Promise(async (resolve, reject) => {
@@ -41,13 +40,7 @@ export function AuthProvider({children}) {
         } catch(err) {
             console.error(err)
             return
-        } finally {
-            /* const res = await fetch("http://localhost:5000/userdata")
-            const data = await res.json()
-            console.log(data)
-            setCurrentUser(data) */
-            setLoading(false)
-        }
+        } 
     }    
 
     async function signUpUser(email, password) {
@@ -57,8 +50,7 @@ export function AuthProvider({children}) {
                 headers: {"Content-type": "application/json; charset=UTF-8"},
                 body: JSON.stringify({email: email, password: password})
             }) 
-            /* const data = await response.json()
-            setCurrentUser(data) */
+
         } catch(err) {
             console.error(err)
             return
@@ -67,7 +59,6 @@ export function AuthProvider({children}) {
             const data = await res.json()
             console.log(data)
             setCurrentUser(data)
-            setLoading(false)
         }
     }
 
