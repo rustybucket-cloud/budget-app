@@ -1,9 +1,10 @@
 import { Link, useParams } from "react-router-dom";
+import React from "react";
 import "./Expenses.css"
 import Category from "../Categories/Category";
 import useExpenses from "../../hooks/useExpenses";
 
-export default function Expenses(props) {
+export default function Expenses() {
     const { name } = useParams()
     const { data, isLoading } = useExpenses('expenses', name)
 

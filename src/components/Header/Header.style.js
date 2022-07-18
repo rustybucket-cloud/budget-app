@@ -1,17 +1,49 @@
-nav ul {
+import { css } from "@emotion/react"
+
+export default {
+  container: css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  `,
+  header: (xl, spacer) => css`
+    display: flex;
+    justify-content: space-between;
+    flex-basis: 1;
+    align-items: center;
+    max-width: ${xl}px;
+    margin: auto;
+    padding: ${spacer};
+
+    h1 {
+      width: 100%;
+    }
+  `,
+  menuButton: (mediaQuery) => css`
+    display: none;
+    ${mediaQuery} {
+      display: block;
+    }
+  `,
+  li: ({spacer}) => css`
+    padding: ${spacer};
+  `,
+  ul: css`
     list-style-type: none;
     display: flex;
-}
-nav ul li:hover, nav .active {
-    border-bottom: 1px solid white;
+  `,
+  nav: (mediaQuery) => css`
+    display: none;
+    ${mediaQuery} {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+  `,
 }
 
-nav ul a {
-  text-decoration: none;
-  color: white;
-}
 
-@media screen and (min-width: 650px) {
+/* @media screen and (min-width: 650px) {
     header {
         display: flex;
         justify-content: space-between;
@@ -62,7 +94,7 @@ nav ul a {
       flex-direction: column;
     }
     nav li {
-      /* border-bottom: 1px solid black; */
+      border-bottom: 1px solid black;
       width: 100%;
       padding: .5em;
       white-space: nowrap;
@@ -77,7 +109,6 @@ nav ul a {
         transition: width 1s;
         display: flex;
       }
-      /* slide page content */
       .slide {
         transform: translateX(-75vw);
         transition: transform 1s;
@@ -86,4 +117,4 @@ nav ul a {
         transform: translateX(0);
         transition: transform 1s;
       }
-}
+} */

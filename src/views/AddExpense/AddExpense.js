@@ -1,7 +1,7 @@
 import "./AddExpense.scss"
 
 
-export default function AddExpense(props) {
+export default function AddExpense() {
     /* const [ selectedCategory, setSelectedCategory ] = useState(null)
     const [ expenseType, setExpenseType ] = useState(null)
     const [ expenseName, setExpenseName ] = useState(null)

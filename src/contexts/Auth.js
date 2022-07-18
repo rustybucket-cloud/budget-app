@@ -1,5 +1,6 @@
-import React, { useContext, useState } from "react";
-
+import React, { useContext, useEffect } from "react";
+import { useLazyQuery, useMutation } from '@apollo/client'
+import { accountQueries } from "../server";
 const AuthContext = React.createContext()
 
 export function useAuth() {
@@ -7,72 +8,30 @@ export function useAuth() {
 }
 
 export function AuthProvider({children}) {
-    const [currentUser, setCurrentUser] = useState(null)
+    const [login, { loading: isLoginLoading, data: currentUser, error: loginError }] = useLazyQuery(accountQueries.login)
+    const [signUp, { loading: isSignupLoading, data: createdUser, error: signUpError }] = useMutation(accountQueries.signUp)
 
-    async function checkIfLoggedIn() {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const res = await fetch('/authorize')
-                const data = await res.json()
-                if (data.status) {
-                    setCurrentUser(data.id)
-                    resolve(true)
-                } else {
-                    resolve(false)
-                }
-            } catch(err) {
-                reject(err)
-            }
-        })
-    }
+    useEffect(() => {
+        if (loginError == null && signUpError == null) return
+        if (loginError) console.error(loginError)
+        if (signUpError) console.error(signUpError)
+    }, [loginError, signUpError])
 
     async function logInUser(email, password) {
-        console.log('login attempt')
-        try {
-            const response = await fetch("/api/login", {
-                method: "POST",
-                headers: {"Content-type": "application/json; charset=UTF-8"},
-                body: JSON.stringify({email: email, password: password})
-            }) 
-            const data = await response.json()
-            console.log(data)
-            setCurrentUser(data)
-        } catch(err) {
-            console.error(err)
-            return
-        } 
-    }    
-
-    async function signUpUser(email, password) {
-        try {
-            await fetch("/signup", {
-                method: "POST",
-                headers: {"Content-type": "application/json; charset=UTF-8"},
-                body: JSON.stringify({email: email, password: password})
-            }) 
-
-        } catch(err) {
-            console.error(err)
-            return
-        } finally {
-            const res = await fetch("/userdata", {method: "GET"})
-            const data = await res.json()
-            console.log(data)
-            setCurrentUser(data)
-        }
+        login({ variables: { email, password }})
     }
 
-    function logOutUser() {
-        setCurrentUser(null)
+    async function signUpUser(email, password) {
+        signUp({ variables: { email, password }})
     }
 
     const value = {
-        currentUser, 
+        currentUser: currentUser || createdUser || null, 
         logInUser,
         signUpUser,
-        logOutUser,
-        checkIfLoggedIn
+        loading: isLoginLoading || isSignupLoading
     }
+
     return (
         <AuthContext.Provider value={value}>
             {children}

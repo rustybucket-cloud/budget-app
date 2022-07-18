@@ -1,15 +1,39 @@
-import './App.scss';
-
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/Auth';
+import { CategoriesProvider } from './contexts/CategoriesProvider';
+import { ThemeProvider } from '@mui/material';
+import { theme } from './theme/theme';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { jsx, css } from '@emotion/react';
+import { Auth0Provider } from "@auth0/auth0-react"
 
-import Header from './components/Header/Header';
-const Categories = React.lazy(() => import('./components/Categories/Categories'));
-const Expenses = React.lazy(() => import('./components/Expenses/Expenses'));
-const AddExpense = React.lazy(() => import('./components/AddExpense/AddExpense'));
-const Login = React.lazy(() => import('./components/Profile/Login'));
-const Signup = React.lazy(() => import('./components/Profile/Signup'));
+import { Header, ProtectedRoute } from './components'
+const Categories = React.lazy(() => import('./views/Categories/Categories'));
+const Expenses = React.lazy(() => import('./views/Expenses/Expenses'));
+const AddExpense = React.lazy(() => import('./views/AddExpense/AddExpense'));
+const Login = React.lazy(() => import('./views/Login/Login'));
+const Signup = React.lazy(() => import('./views/Login/Signup'));
+
+const client = new ApolloClient({
+  // eslint-disable-next-line no-undef
+  uri: process.env.REACT_APP_API_LOCATION,
+  cache: new InMemoryCache()
+})
+
+const appStyle = css`
+  background-color: ${theme.palette.primary.main};
+  min-height: 100vh;
+`
+
+const mainStyle = css`
+  max-width: ${theme.breakpoints.xl};
+  margin: auto;
+  padding: 0 ${theme.spacing(4)};
+`
 
 function App() {
   // used to open mobile menu
@@ -19,23 +43,43 @@ function App() {
   const [ active, setActive ] = useState(null)
 
   return (
-    <div className="App">
-      <AuthProvider>
-        <BrowserRouter>
-          <Header setNav={setNav} nav={nav} active={active}/>
-          <main className={nav ? "slide" : "slideBack"}>
-          <React.Suspense fallback={<p>Loading</p>}>
-            <Routes>
-              <Route path="/" element={<Categories setCategory={setCategory} setActive={setActive} />} />
-              <Route path="/expenses/:name" element={<Expenses category={category} />} />
-              <Route path="/addexpense" element={<AddExpense setActive={setActive} />}  />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />}/>
-            </Routes>
-          </React.Suspense>
-          </main>
-        </BrowserRouter>
-      </AuthProvider>
+    <div className="App" css={appStyle}>
+      <ApolloProvider client={client}>
+        <Auth0Provider
+          domain={process.env.REACT_APP_AUTH_DOMAIN}
+          clientId={process.env.REACT_APP_AUTH_CLIENT_ID}
+          redirectUri={process.env.REACT_APP_AUTH_REDIRECT_URL}
+        >
+          <ThemeProvider theme={theme}>
+            <BrowserRouter>
+              <Header setNav={setNav} nav={nav} active={active}/>
+              <main className={nav ? "slide" : "slideBack"} css={mainStyle}>
+              <React.Suspense fallback={<p>Loading</p>}>
+                <Routes>
+                  <Route path="/" element={
+                    <ProtectedRoute>
+                      <Categories setCategory={setCategory} setActive={setActive} />
+                    </ProtectedRoute>} 
+                  />
+                  <Route path="/expenses/:name" element={
+                    <ProtectedRoute>
+                      <Expenses category={category} />
+                    </ProtectedRoute>} 
+                  />
+                  <Route path="/addexpense" element={
+                    <ProtectedRoute>
+                      <AddExpense setActive={setActive} />
+                    </ProtectedRoute>}  
+                  />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />}/>
+                </Routes>
+              </React.Suspense>
+              </main>
+            </BrowserRouter>
+          </ThemeProvider>
+        </Auth0Provider>
+      </ApolloProvider>
     </div>
   );
 }
